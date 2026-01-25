@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "posbuzz-backend",
+  "name": "pos-buzz",
   "buildCommand": "cd backend && npm install && npx prisma generate && npm run build",
   "outputDirectory": "backend/dist",
   "installCommand": "cd backend && npm install",

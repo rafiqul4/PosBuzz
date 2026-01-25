@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsArray, IsNumber, Min, ValidateNested } from 'class-validator';
+import { IsArray, IsNumber, Min, ValidateNested, ArrayMinSize } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class SaleItemDto {
@@ -12,6 +12,7 @@ export class SaleItemDto {
 
 export class CreateSaleDto {
   @IsArray()
+  @ArrayMinSize(1, { message: 'At least one item is required' })
   @ValidateNested({ each: true })
   @Type(() => SaleItemDto)
   items: SaleItemDto[];

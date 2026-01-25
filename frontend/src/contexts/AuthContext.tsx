@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { User } from '../api/auth';
 
 interface AuthContextType {
@@ -21,12 +20,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedUser = localStorage.getItem('user');
 
     if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      try {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        // Clear corrupted data
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
     }
 
     // Listen for auth logout events from API client
     const handleLogout = () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       setToken(null);
       setUser(null);
     };

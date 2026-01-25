@@ -7,38 +7,47 @@ export class SalesService {
   constructor(private prisma: PrismaService) {}
 
   async create(createSaleDto: CreateSaleDto, userId: number) {
-    // Validate products and check stock
-    const productIds = createSaleDto.items.map((item) => item.productId);
-    const products = await this.prisma.product.findMany({
-      where: { id: { in: productIds } },
-    });
-
-    if (products.length !== productIds.length) {
-      throw new NotFoundException('One or more products not found');
-    }
-
-    // Check stock availability
+    // Aggregate quantities by productId to handle duplicates
+    const productQuantities = new Map<number, number>();
     for (const item of createSaleDto.items) {
-      const product = products.find((p) => p.id === item.productId);
-      if (!product) {
-        throw new NotFoundException(`Product with ID ${item.productId} not found`);
-      }
-      if (product.stock_quantity < item.quantity) {
-        throw new BadRequestException(
-          `Insufficient stock for product "${product.name}". Available: ${product.stock_quantity}, Requested: ${item.quantity}`,
-        );
-      }
+      const currentQty = productQuantities.get(item.productId) || 0;
+      productQuantities.set(item.productId, currentQty + item.quantity);
     }
 
-    // Calculate total
-    let total = 0;
-    for (const item of createSaleDto.items) {
-      const product = products.find((p) => p.id === item.productId);
-      total += product.price * item.quantity;
-    }
+    const productIds = Array.from(productQuantities.keys());
 
     // Create sale and update stock in a transaction
     return this.prisma.$transaction(async (tx) => {
+      // Fetch and lock products for update within transaction
+      const products = await tx.product.findMany({
+        where: { id: { in: productIds } },
+      });
+
+      if (products.length !== productIds.length) {
+        throw new NotFoundException('One or more products not found');
+      }
+
+      // Check stock availability with aggregated quantities
+      for (const [productId, totalQuantity] of productQuantities) {
+        const product = products.find((p) => p.id === productId);
+        if (!product) {
+          throw new NotFoundException(`Product with ID ${productId} not found`);
+        }
+        if (product.stock_quantity < totalQuantity) {
+          throw new BadRequestException(
+            `Insufficient stock for product "${product.name}". Available: ${product.stock_quantity}, Requested: ${totalQuantity}`,
+          );
+        }
+      }
+
+      // Calculate total
+      let total = 0;
+      for (const item of createSaleDto.items) {
+        const product = products.find((p) => p.id === item.productId);
+        total += product.price * item.quantity;
+      }
+
+      // Create sale
       const sale = await tx.sale.create({
         data: {
           userId,
@@ -63,13 +72,13 @@ export class SalesService {
         },
       });
 
-      // Update stock quantities
-      for (const item of createSaleDto.items) {
+      // Update stock quantities with aggregated amounts
+      for (const [productId, totalQuantity] of productQuantities) {
         await tx.product.update({
-          where: { id: item.productId },
+          where: { id: productId },
           data: {
             stock_quantity: {
-              decrement: item.quantity,
+              decrement: totalQuantity,
             },
           },
         });

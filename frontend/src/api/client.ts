@@ -32,12 +32,6 @@ apiClient.interceptors.response.use(
       localStorage.removeItem('user');
       // Dispatch custom event for logout
       window.dispatchEvent(new Event('auth:logout'));
-      // Fallback to hard redirect if event doesn't handle it
-      setTimeout(() => {
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
-        }
-      }, 100);
     }
     return Promise.reject(error);
   }

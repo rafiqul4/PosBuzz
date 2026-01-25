@@ -10,6 +10,19 @@ PosBuzz is a monorepo with:
 
 Both can be deployed on Vercel, but they require separate Vercel projects.
 
+## Important Notes
+
+### Prisma 7 Configuration
+This project uses **Prisma ORM v7**, which has a new configuration approach:
+- Database connection URL is configured in `backend/prisma.config.ts` (not in `schema.prisma`)
+- The `schema.prisma` file no longer contains a `url` field in the datasource block
+- This is the new standard for Prisma 7 and is fully supported
+
+### Database Requirements
+- PostgreSQL database required (tested with Neon, Supabase, Railway)
+- Database URL must be set in the `DATABASE_URL` environment variable
+- Prisma will read this from `prisma.config.ts` during build and runtime
+
 ---
 
 ## Prerequisites

@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from '../backend/src/app.module';
 import type { Request, Response } from 'express';
-import * as express from 'express';
+import express from 'express';
 
 // Create Express app instance
 const server = express();
@@ -35,7 +35,7 @@ async function bootstrapServer() {
 
   // Enable CORS with restricted origins
   cachedApp.enableCors({
-    origin: (origin, callback) => {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
       // Allow requests with no Origin header (e.g., curl, server-to-server)
       if (!origin) {
         callback(null, true);

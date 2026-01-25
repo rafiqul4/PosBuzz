@@ -57,3 +57,6 @@ Submission Requirements
 • What was completed
 • What was not completed
 • Why
+
+Deployment:
+ - Use Vecel for this project deployment

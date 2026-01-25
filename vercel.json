@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "name": "posbuzz-backend",
+  "buildCommand": "cd backend && npm install && npx prisma generate && npm run build",
+  "outputDirectory": "backend/dist",
+  "installCommand": "cd backend && npm install",
+  "devCommand": "cd backend && npm run start:dev",
+  "framework": null,
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

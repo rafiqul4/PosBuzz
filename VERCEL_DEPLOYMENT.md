@@ -33,7 +33,7 @@ This project uses **Prisma ORM v7**, which has a new configuration approach:
 
 ---
 
-## Option 1: Deploy Backend on Vercel (Using Root Directory)
+## Option 1: Deploy Backend on Vercel (Serverless - Recommended Setup)
 
 ### Step 1: Create New Vercel Project for Backend
 
@@ -46,14 +46,14 @@ This project uses **Prisma ORM v7**, which has a new configuration approach:
 
 In the project configuration page:
 
-- **Project Name**: `posbuzz-backend` (or your choice)
+- **Project Name**: `pos-buzz` (or your choice)
 - **Framework Preset**: Other
-- **Root Directory**: Leave as `.` (root) or select `backend`
-  - If you select root (`.`), Vercel will use `/vercel.json`
-  - If you select `backend`, Vercel will use `/backend/vercel.json`
-- **Build Command**: Override with `cd backend && npm install && npx prisma generate && npm run build`
-- **Output Directory**: `backend/dist`
-- **Install Command**: `cd backend && npm install`
+- **Root Directory**: `.` (root - DO NOT select backend)
+- **Build Command**: Leave as default (will use `vercel-build` script)
+- **Output Directory**: Leave empty (serverless functions don't need this)
+- **Install Command**: `npm install`
+
+**Important:** The backend is deployed as a Vercel Serverless Function using the `/api/index.ts` handler.
 
 ### Step 3: Add Environment Variables
 

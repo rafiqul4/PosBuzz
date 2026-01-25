@@ -1,11 +1,21 @@
 {
   "version": 2,
   "name": "pos-buzz",
-  "buildCommand": "cd backend && npm install && npx prisma generate && npm run build",
-  "outputDirectory": "backend/dist",
-  "installCommand": "cd backend && npm install",
-  "devCommand": "cd backend && npm run start:dev",
-  "framework": null,
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["backend/**"]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.ts"
+    }
+  ],
   "env": {
     "NODE_ENV": "production"
   }

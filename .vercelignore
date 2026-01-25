@@ -1,0 +1,50 @@
+# Documentation
+*.md
+!README.md
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Tests
+backend/test/
+*.spec.ts
+*.test.ts
+
+# Development files
+.git
+.github
+.vscode
+.idea
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Temporary files
+.tmp
+.temp
+tmp/
+
+# Build artifacts (will be rebuilt)
+backend/dist/
+dist/
+
+# Git
+.gitignore
+.gitattributes
+
+# CI/CD
+.travis.yml
+.circleci/
+
+# Misc
+task.md
+CODE_REVIEW_RESPONSE.md
+COMPLETION_NOTES.md
+DEPLOYMENT_FIX_SUMMARY.md
+FINAL_COMPLETION_REPORT.md
+FINAL_SUMMARY.md
+PosBuzz.postman_collection.json

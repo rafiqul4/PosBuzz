@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { authApi, LoginDto } from '../api/auth';
+import { authApi, type LoginDto } from '../api/auth';
 import { useAuth } from '../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {

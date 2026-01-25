@@ -1,8 +1,13 @@
-// Prisma configuration is managed through:
-// - prisma/schema.prisma for database schema
-// - Environment variables for connection strings
-// This file is kept for compatibility but is not used by Prisma CLI
+import 'dotenv/config';
+import { defineConfig, env } from 'prisma/config';
 
-const config = {};
+export default defineConfig({
+  schema: 'prisma/schema.prisma',
+  migrations: {
+    path: 'prisma/migrations',
+  },
+  datasource: {
+    url: env('DATABASE_URL'),
+  },
+});
 
-export default config;

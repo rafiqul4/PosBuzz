@@ -44,6 +44,9 @@ export class SalesService {
       let total = 0;
       for (const item of createSaleDto.items) {
         const product = products.find((p) => p.id === item.productId);
+        if (!product) {
+          throw new NotFoundException(`Product with ID ${item.productId} not found`);
+        }
         total += product.price * item.quantity;
       }
 
@@ -55,6 +58,9 @@ export class SalesService {
           saleItems: {
             create: createSaleDto.items.map((item) => {
               const product = products.find((p) => p.id === item.productId);
+              if (!product) {
+                throw new NotFoundException(`Product with ID ${item.productId} not found`);
+              }
               return {
                 productId: item.productId,
                 quantity: item.quantity,

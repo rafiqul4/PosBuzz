@@ -1,6 +1,6 @@
 import apiClient from './client';
-import { Product } from './products';
-import { User } from './auth';
+import type { Product } from './products';
+import type { User } from './auth';
 
 export interface SaleItem {
   id: number;

@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd backend && npm install && npx prisma generate && npm run build",
+  "outputDirectory": "backend/dist",
+  "installCommand": "cd backend && npm install",
+  "framework": null,
+  "devCommand": "cd backend && npm run start:dev"
+}

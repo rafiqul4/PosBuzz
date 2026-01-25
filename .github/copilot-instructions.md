@@ -107,7 +107,7 @@ npx prisma generate          # Generate Prisma client
 npx prisma migrate dev       # Create and apply migrations
 npx prisma migrate deploy    # Apply migrations in production
 npx prisma studio           # Open Prisma Studio GUI
-npx prisma migrate reset    # Reset database (deletes all data)
+npx prisma migrate reset    # Reset database (⚠️ WARNING: DELETES ALL DATA - backup first!)
 ```
 
 ### Frontend (in `frontend/` directory)
@@ -188,7 +188,7 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 PORT=3000
 NODE_ENV=development
-CORS_ORIGINS=http://localhost:5173
+CORS_ORIGINS=http://localhost:5173  # For multiple origins: http://localhost:5173,https://posbuzz.vercel.app
 ```
 
 ### Frontend (`.env`)
@@ -346,7 +346,7 @@ cd frontend && npm update
 - **Build errors**: Ensure all dependencies are installed
 
 ### Database Issues
-- **Migration conflicts**: Run `npx prisma migrate reset` (WARNING: deletes data)
+- **Migration conflicts**: Run `npx prisma migrate reset` (⚠️ WARNING: deletes ALL data - backup first!)
 - **Connection timeout**: Check PostgreSQL is running
 - **Schema changes not reflected**: Run `npx prisma generate` after migrations
 
@@ -364,7 +364,7 @@ cd frontend && npm update
 - **Redis**: Configured but not actively used in current version
 - **CORS**: Must be configured properly in production
 - **JWT Secret**: Use a strong secret (32+ characters) in production
-- **Migrations**: Always backup data before running `prisma migrate reset`
+- **Migrations**: ⚠️ Always backup data before running `prisma migrate reset` (deletes ALL data)
 
 ## Support
 

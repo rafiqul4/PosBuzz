@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User } from '../api/auth';
 
 interface AuthContextType {
@@ -23,6 +24,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
+
+    // Listen for auth logout events from API client
+    const handleLogout = () => {
+      setToken(null);
+      setUser(null);
+    };
+
+    window.addEventListener('auth:logout', handleLogout);
+    return () => window.removeEventListener('auth:logout', handleLogout);
   }, []);
 
   const login = (newToken: string, newUser: User) => {

@@ -30,7 +30,14 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      // Dispatch custom event for logout
+      window.dispatchEvent(new Event('auth:logout'));
+      // Fallback to hard redirect if event doesn't handle it
+      setTimeout(() => {
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
+      }, 100);
     }
     return Promise.reject(error);
   }

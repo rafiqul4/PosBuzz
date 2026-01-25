@@ -1,6 +1,3 @@
-# Frontend files (not needed for backend deployment)
-frontend/
-
 # Documentation
 *.md
 !README.md

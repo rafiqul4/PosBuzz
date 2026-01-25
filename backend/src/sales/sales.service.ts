@@ -34,6 +34,9 @@ export class SalesService {
     let total = 0;
     const saleItems = dto.items.map((item) => {
       const product = products.find((p) => p.id === item.productId);
+      if (!product) {
+        throw new NotFoundException(`Product with id ${item.productId} not found`);
+      }
       const itemTotal = product.price * item.quantity;
       total += itemTotal;
       return {

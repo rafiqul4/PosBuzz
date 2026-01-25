@@ -12,13 +12,12 @@ import {
   Typography,
   Card,
   Row,
-  Col,
-  Tag
+  Col
 } from 'antd';
 import { PlusOutlined, ShoppingCartOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { salesApi, CreateSaleDto, Sale } from '../api/sales';
-import { productsApi, Product } from '../api/products';
+import { salesApi, type Sale } from '../api/sales';
+import { productsApi, type Product } from '../api/products';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 

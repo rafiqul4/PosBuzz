@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LoginDto } from '../api/auth';
+import { type LoginDto } from '../api/auth';
 
 const Login: React.FC = () => {
   const { login } = useAuth();

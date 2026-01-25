@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { RegisterDto } from '../api/auth';
+import { type RegisterDto } from '../api/auth';
 
 const Register: React.FC = () => {
   const { register } = useAuth();

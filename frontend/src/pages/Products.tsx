@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { productsApi, Product, CreateProductDto, UpdateProductDto } from '../api/products';
+import { productsApi, type Product, type UpdateProductDto } from '../api/products';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 

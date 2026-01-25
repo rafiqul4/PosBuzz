@@ -298,17 +298,35 @@ npm run build
 
 ## 🚀 Deployment
 
+**For complete deployment instructions to Vercel (and Railway for backend), see [DEPLOYMENT.md](./DEPLOYMENT.md).**
+
+### Quick Deployment Summary
+
+#### Frontend (Vercel)
+1. Connect GitHub repo to Vercel
+2. Set root directory to `frontend`
+3. Add environment variable: `VITE_API_URL`
+4. Deploy!
+
+#### Backend (Railway recommended)
+1. Deploy to Railway.app
+2. Add PostgreSQL database
+3. Set environment variables including `CORS_ORIGINS`
+4. Run migrations: `npx prisma migrate deploy`
+
 ### Backend Deployment Checklist
-- [ ] Set secure JWT_SECRET
+- [ ] Set secure JWT_SECRET (32+ characters)
 - [ ] Configure production database URL
 - [ ] Set NODE_ENV to "production"
 - [ ] Enable HTTPS
-- [ ] Configure CORS for production domain
+- [ ] Configure CORS_ORIGINS with frontend domain
 
 ### Frontend Deployment Checklist
 - [ ] Update VITE_API_URL to production backend URL
 - [ ] Build production bundle: `npm run build`
-- [ ] Deploy dist folder to static hosting (Vercel, Netlify, etc.)
+- [ ] Deploy to Vercel
+
+📖 **See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed step-by-step instructions.**
 
 ## 🤝 Contributing
 

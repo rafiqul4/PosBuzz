@@ -23,7 +23,19 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+PosBuzz Backend API - A NestJS-based Point of Sale system backend.
+
+### Key Technologies
+- **NestJS**: Progressive Node.js framework
+- **Prisma ORM v7**: Database ORM with TypeScript
+- **PostgreSQL**: Primary database
+- **JWT Authentication**: Secure API authentication
+
+### Prisma 7 Configuration
+This project uses Prisma ORM v7 with the new configuration approach:
+- Database connection is configured in `prisma.config.ts`
+- The `schema.prisma` file contains only the data model (no connection URL)
+- Environment variables are loaded from `.env` file
 
 ## Project setup
 

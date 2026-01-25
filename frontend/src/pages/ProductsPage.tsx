@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal, Form, Input, InputNumber, Space, message, Popconfirm } from 'antd';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { productsApi, Product, CreateProductDto, UpdateProductDto } from '../api/products';
+import { productsApi, type Product, type CreateProductDto, type UpdateProductDto } from '../api/products';
 
 const ProductsPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

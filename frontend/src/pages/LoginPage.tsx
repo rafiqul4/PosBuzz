@@ -40,8 +40,10 @@ const LoginPage: React.FC = () => {
     loginMutation.mutate(values);
   };
 
-  const onRegisterFinish = (values: RegisterDto) => {
-    registerMutation.mutate(values);
+  const onRegisterFinish = (values: any) => {
+    // Remove confirmPassword from the data sent to API
+    const { confirmPassword, ...registerData } = values;
+    registerMutation.mutate(registerData as RegisterDto);
   };
 
   return (

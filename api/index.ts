@@ -294,8 +294,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       error: error instanceof Error ? error.message : 'Unknown error',
       path: req.url,
     });
-  } finally {
-    // Disconnect Prisma in serverless to prevent connection issues
-    await prisma.$disconnect();
   }
 }

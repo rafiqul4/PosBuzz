@@ -209,7 +209,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({ message: 'Items array is required' });
       }
 
-      // Validate stock
+      // Validate stock and calculate totals
+      const itemsWithPrices: Array<{ productId: number; quantity: number; unitPrice: number }> = [];
+      let totalAmount = 0;
+
       for (const item of items) {
         const product = await prisma.product.findUnique({ where: { id: item.productId } });
         if (!product) {
@@ -218,29 +221,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (product.stock_quantity < item.quantity) {
           return res.status(400).json({ message: `Insufficient stock for ${product.name}` });
         }
+        itemsWithPrices.push({
+          productId: item.productId,
+          quantity: item.quantity,
+          unitPrice: product.price,
+        });
+        totalAmount += product.price * item.quantity;
       }
 
-      // Calculate total
-      let totalAmount = 0;
-      for (const item of items) {
-        const product = await prisma.product.findUnique({ where: { id: item.productId } });
-        totalAmount += product!.price * item.quantity;
-      }
-
-      // Create sale with items and update stock
+      // Create sale with items
       const sale = await prisma.sale.create({
         data: {
           userId: user.id,
           totalAmount,
           items: {
-            create: await Promise.all(items.map(async (item: any) => {
-              const product = await prisma.product.findUnique({ where: { id: item.productId } });
-              return {
-                productId: item.productId,
-                quantity: item.quantity,
-                unitPrice: product!.price,
-              };
-            })),
+            create: itemsWithPrices,
           },
         },
         include: { items: { include: { product: true } } },

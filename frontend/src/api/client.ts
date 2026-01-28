@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// Use environment variable in development, hardcode production URL for Vercel
+const API_BASE_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.PROD ? 'https://pos-buzzbackend.vercel.app' : 'http://localhost:3000');
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

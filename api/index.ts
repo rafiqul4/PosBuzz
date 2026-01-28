@@ -2,8 +2,8 @@ import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ExpressAdapter } from '@nestjs/platform-express';
-// Import from compiled dist folder
-import { AppModule } from '../backend/dist/app.module';
+// Import from source files for Vercel build
+import { AppModule } from '../backend/src/app.module';
 import type { Request, Response } from 'express';
 import express from 'express';
 

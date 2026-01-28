@@ -4,13 +4,16 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
 // Initialize Prisma with connection pooling for serverless
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-    },
-  },
-});
+let prisma: PrismaClient;
+
+if (process.env.NODE_ENV === 'production') {
+  prisma = new PrismaClient();
+} else {
+  if (!(global as any).prisma) {
+    (global as any).prisma = new PrismaClient();
+  }
+  prisma = (global as any).prisma;
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default-secret-change-me';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
@@ -281,9 +284,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   } catch (error) {
     console.error('API Error:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown',
+      stack: error instanceof Error ? error.stack : undefined,
+      path: req.url,
+      method: req.method,
+    });
     return res.status(500).json({ 
       message: 'Internal Server Error',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
+      path: req.url,
     });
+  } finally {
+    // Disconnect Prisma in serverless to prevent connection issues
+    await prisma.$disconnect();
   }
 }

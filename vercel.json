@@ -1,18 +1,15 @@
 {
   "version": 2,
-  "name": "pos-buzz",
-  "functions": {
-    "api/index.ts": {
-      "runtime": "@vercel/node@3"
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/api/index.ts"
+      "dest": "/api/index"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }

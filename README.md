@@ -1,4 +1,4 @@
-# PosBuzz - POS Application
+y# PosBuzz - POS Application
 
 A full-stack Point of Sale (POS) application built with NestJS, PostgreSQL, Prisma, Redis, React, Ant Design, and TanStack Query.
 

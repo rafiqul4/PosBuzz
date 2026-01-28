@@ -46,7 +46,8 @@ async function authenticate(req: VercelRequest): Promise<{ id: number; email: st
     const token = authHeader.substring(7);
     const decoded = jwt.verify(token, JWT_SECRET);
     if (typeof decoded === 'object' && decoded !== null && 'sub' in decoded && 'email' in decoded) {
-      return { id: decoded.sub as number, email: decoded.email as string };
+      const sub = typeof decoded.sub === 'number' ? decoded.sub : parseInt(String(decoded.sub), 10);
+      return { id: sub, email: String(decoded.email) };
     }
     return null;
   } catch {

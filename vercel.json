@@ -1,21 +1,14 @@
 {
   "version": 2,
-  "buildCommand": "cd backend && npm install && npx prisma generate && npm run build",
-  "installCommand": "npm install && cd backend && npm install",
+  "buildCommand": "npm run vercel-build",
+  "installCommand": "npm install",
   "functions": {
-    "api/**/*.ts": {
+    "api/index.ts": {
       "memory": 1024,
       "maxDuration": 30
     }
   },
   "rewrites": [
-    { 
-      "source": "/api/(.*)", 
-      "destination": "/api" 
-    },
-    { 
-      "source": "/(.*)", 
-      "destination": "/api" 
-    }
+    { "source": "/(.*)", "destination": "/api" }
   ]
 }

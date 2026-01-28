@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "PosBuzz API for Vercel Serverless Deployment",
   "scripts": {
-    "build": "npx prisma generate --schema=./backend/prisma/schema.prisma",
-    "vercel-build": "npx prisma generate --schema=./backend/prisma/schema.prisma",
-    "postinstall": "npx prisma generate --schema=./backend/prisma/schema.prisma"
+    "build": "prisma generate --schema=./backend/prisma/schema.prisma",
+    "vercel-build": "prisma generate --schema=./backend/prisma/schema.prisma",
+    "postinstall": "prisma generate --schema=./backend/prisma/schema.prisma || true"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

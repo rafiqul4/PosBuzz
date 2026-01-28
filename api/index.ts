@@ -2,7 +2,8 @@ import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import { AppModule } from '../backend/src/app.module';
+// Import from compiled dist folder
+import { AppModule } from '../backend/dist/app.module';
 import type { Request, Response } from 'express';
 import express from 'express';
 

@@ -1,12 +1,13 @@
 {
   "version": 2,
   "name": "pos-buzz",
+  "buildCommand": "npm run vercel-build",
   "builds": [
     {
       "src": "api/index.ts",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["backend/**"]
+        "includeFiles": ["backend/dist/**", "backend/prisma/**", "backend/node_modules/.prisma/**"]
       }
     }
   ],

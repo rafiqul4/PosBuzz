@@ -44,8 +44,11 @@ async function authenticate(req: VercelRequest): Promise<{ id: number; email: st
   }
   try {
     const token = authHeader.substring(7);
-    const decoded = jwt.verify(token, JWT_SECRET) as { sub: number; email: string };
-    return { id: decoded.sub, email: decoded.email };
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (typeof decoded === 'object' && decoded !== null && 'sub' in decoded && 'email' in decoded) {
+      return { id: decoded.sub as number, email: decoded.email as string };
+    }
+    return null;
   } catch {
     return null;
   }
@@ -104,7 +107,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
 
-      const token = jwt.sign({ sub: user.id, email: user.email }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+      const token = jwt.sign({ sub: user.id, email: user.email }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
       return res.status(200).json({
         access_token: token,
         user: { id: user.id, email: user.email, name: user.name },
@@ -194,7 +197,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (!user) return res.status(401).json({ message: 'Unauthorized' });
 
       const sales = await prisma.sale.findMany({
-        include: { items: { include: { product: true } }, user: { select: { id: true, email: true, name: true } } },
+        include: { saleItems: { include: { product: true } }, user: { select: { id: true, email: true, name: true } } },
         orderBy: { createdAt: 'desc' },
       });
       return res.status(200).json(sales);
@@ -212,7 +215,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       // Validate stock and calculate totals
-      const itemsWithPrices: Array<{ productId: number; quantity: number; unitPrice: number }> = [];
+      const itemsWithPrices: Array<{ productId: number; quantity: number; price: number }> = [];
       let totalAmount = 0;
 
       for (const item of items) {
@@ -226,7 +229,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         itemsWithPrices.push({
           productId: item.productId,
           quantity: item.quantity,
-          unitPrice: product.price,
+          price: product.price,
         });
         totalAmount += product.price * item.quantity;
       }
@@ -235,12 +238,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const sale = await prisma.sale.create({
         data: {
           userId: user.id,
-          totalAmount,
-          items: {
+          total: totalAmount,
+          saleItems: {
             create: itemsWithPrices,
           },
         },
-        include: { items: { include: { product: true } } },
+        include: { saleItems: { include: { product: true } } },
       });
 
       // Deduct stock
@@ -263,7 +266,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const saleId = parseInt(saleMatch[1]);
       const sale = await prisma.sale.findUnique({
         where: { id: saleId },
-        include: { items: { include: { product: true } }, user: { select: { id: true, email: true, name: true } } },
+        include: { saleItems: { include: { product: true } }, user: { select: { id: true, email: true, name: true } } },
       });
       if (!sale) return res.status(404).json({ message: 'Sale not found' });
       return res.status(200).json(sale);

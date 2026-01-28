@@ -18,15 +18,23 @@ const JWT_SECRET = process.env.JWT_SECRET || 'default-secret-change-me';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 
 // CORS headers
-function setCorsHeaders(res: VercelResponse) {
+function setCorsHeaders(res: VercelResponse, req: VercelRequest) {
   const allowedOrigins = (process.env.CORS_ORIGINS || '').split(',').map(o => o.trim()).filter(Boolean);
+  const origin = req.headers.origin;
+  
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
   if (allowedOrigins.length === 0) {
+    // Development mode: allow all origins
     res.setHeader('Access-Control-Allow-Origin', '*');
+  } else if (origin && allowedOrigins.includes(origin)) {
+    // Production mode: allow specific origins
+    res.setHeader('Access-Control-Allow-Origin', origin);
   } else {
-    res.setHeader('Access-Control-Allow-Origin', allowedOrigins[0]);
+    // Fallback to first allowed origin
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigins[0] || '*');
   }
 }
 
@@ -56,7 +64,7 @@ async function authenticate(req: VercelRequest): Promise<{ id: number; email: st
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  setCorsHeaders(res);
+  setCorsHeaders(res, req);
 
   // Handle preflight
   if (req.method === 'OPTIONS') {

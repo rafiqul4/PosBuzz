@@ -1,38 +1,32 @@
-import 'reflect-metadata';
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import { AppModule } from '../backend/src/app.module';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import express from 'express';
-
-const server = express();
-let app: any;
-
-async function createNestServer() {
-  const adapter = new ExpressAdapter(server);
-  
-  app = await NestFactory.create(AppModule, adapter, {
-    logger: console,
-  });
-  
-  app.enableCors({
-    origin: true,
-    credentials: true,
-  });
-  
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true,
-    whitelist: true,
-  }));
-  
-  await app.init();
-  return server;
-}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (!app) {
-    await createNestServer();
+  // Simple test endpoint to verify Vercel deployment
+  if (req.method === 'GET' && req.url === '/') {
+    return res.status(200).json({ 
+      message: 'PosBuzz API is running',
+      timestamp: new Date().toISOString(),
+      method: req.method,
+      url: req.url
+    });
   }
-  return server(req, res);
+
+  // Handle OPTIONS for CORS preflight
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return res.status(200).end();
+  }
+
+  // For now, return a simple response for all other routes
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Content-Type', 'application/json');
+  
+  return res.status(200).json({
+    message: 'PosBuzz API - Route not implemented yet',
+    path: req.url,
+    method: req.method,
+    timestamp: new Date().toISOString()
+  });
 }
